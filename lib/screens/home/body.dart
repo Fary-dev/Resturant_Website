@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'constant.dart';
+import '../../Colors/constant.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -92,7 +92,7 @@ class Body extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ],
