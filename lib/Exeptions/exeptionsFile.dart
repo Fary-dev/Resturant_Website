@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/Constant/widgets.dart';
+import 'package:flutter_app/Widgets/widgets.dart';
 
 extension ContextExtenstion on BuildContext {
   double get width => MediaQuery.of(this).size.width;
   double get height => MediaQuery.of(this).size.height;
+  void pageRoute(Widget child)=>Navigator.of(this).push( MaterialPageRoute<void>(builder: (_)=>child));
 }
 
 extension StringExtenstion on String {
-  Widget toLabel({double? fontSize, Color? color, bool bold=false,}) => CustomText(
+  Widget toLabel({double? fontSize, Color? color, bool bold=false,TextAlign? alignment}) => CustomText(
     this,
     bold: bold,
     fontSize: fontSize,
     color: color,
+    alignment: alignment,
   );
 }
 

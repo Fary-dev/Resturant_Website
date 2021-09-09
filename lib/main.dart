@@ -1,47 +1,52 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_app/Constant/widgets.dart';
-import 'Constant/Colors/constant.dart';
+import 'Constant/constant.dart';
+import 'Providers/api_provider.dart';
+import 'screens/home_Screen.dart';
+import 'screens/login_width_web.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+
+import 'screens/onBurding_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  initialize();
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+void initialize() {
+  // inject authentication controller
+  Get.lazyPut(
+    () => AuthenticationController(),
+  );
+}
+
+class MyApp extends GetWidget<AuthenticationController> {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Foodo',
+      title: 'Foodo ',
       theme: ThemeData(
-        primaryColor: primaryColor,
-        // visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: HomeScreen(),
-    );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-          child: Column(
-        children: [
-          Container(
-            height: context.size!.height * 0.20,
+          primaryColor: primaryColor,
+          primarySwatch: Colors.red,
+          appBarTheme: AppBarTheme(color: primaryColor)
+          // visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          CustomButton(title: 'Click Me', onTap: () {})
-        ],
-      )),
+      home: defaultTargetPlatform == TargetPlatform.android ||
+              defaultTargetPlatform == TargetPlatform.macOS
+          ? OnburdingScreen()
+          : Obx(
+              () => controller.state is UnAuthenticated
+                  ? LoginWeb()
+                  : controller.state is Authenticated
+                      ? HomeScreen()
+                      : CircularProgressIndicator(),
+            ),
+      // :?LoginWeb():HomeScreen(),
     );
   }
 }

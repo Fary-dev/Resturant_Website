@@ -1,51 +1,64 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Constant/constant.dart';
 import 'package:flutter_app/Exeptions/exeptionsFile.dart';
 import 'package:flutter_app/Widgets/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 
 class MobileApp extends StatelessWidget {
-  const MobileApp({Key? key}) : super(key: key);
-
+   MobileApp({Key? key}) : super(key: key);
+final _globalKey=GlobalKey();
   @override
   Widget build(BuildContext context) {
-    var ff=context.width;
     return Scaffold(
-      body:Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            '$ff'.toLabel(),
-            'Welcome to ${RESTURANT_NAME}'.toLabel(fontSize: 20),
-            CustomTextField(lable: 'User Name').vPadding(10),
-            CustomTextField(lable: 'Password',obscureText: true,).vPadding(10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        height: context.height*0.6,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _globalKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                CustomButton(
-                  title: 'SignUp',
-                  onTap: () => print('Clicked'),
-                  radius: 10,
-                  padding: 5,
-                  borderWidth: 2,
-                  color: Color(0xffffffff),
-                  icon: Icons.edit,
+                SvgPicture.asset(
+                  'Images/welcome.svg',
+                  height: context.height*0.2,
                 ),
-                const SizedBox(width: 20,),
-                CustomButton(
-                  title: 'Login',
-                  onTap: () => print('Clicked'),
-                  radius: 10,
-                  padding: 5,
-                  icon: Icons.vpn_key_rounded,
-                ),
+                'Welcome to ${RESTURANT_NAME}'.toLabel(fontSize: 20),
+                CustomTextField(lable: 'User Name').vPadding(10),
+                CustomTextField(
+                  lable: 'Password',
+                  obscureText: true,
+                ).vPadding(10),
+                SizedBox(height: 20,),
               ],
             ),
-          ],
+          ),
         ),
-      ).center.hPadding(15),
+      ).hPadding(15).center,
+      bottomSheet: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CustomButton(
+            title: 'Login',
+            onTap: () => print('Clicked'),
+            radius: 10,
+            padding: 5,
+            icon: Icons.vpn_key_rounded,
+          ),
+          CustomButton(
+            title: 'SignUp',
+            onTap: () => print('Clicked'),
+            radius: 10,
+            padding: 5,
+            borderWidth: 2,
+            color: Color(0xffffffff),
+            icon: Icons.edit,
+          ),
+        ],
+      ).vPadding(40).hPadding(15),
     );
   }
 }
