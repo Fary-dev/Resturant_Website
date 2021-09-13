@@ -1,63 +1,69 @@
+// ignore_for_file: unnecessary_statements, unused_label, avoid_unused_constructor_parameters
 
 class User {
- late int id;
- late String firstName;
- late String lastName;
- late String mobile;
- late String? email;
- late String? password;
- late String? token;
- late String? adress;
- late int type;
- late bool activity;
- late String? image;
- late String? lastLogin;
-
+  late int id;
+  late String firstName;
+  late String lastName;
+  late String mobile;
+  late String? email;
+  late String? password;
+  late String? token;
+  late String? adress;
+  late int type;
+  late bool isActive;
+  late String? image;
+  late String? lastLogin;
 
   User({
-     required int id,
-     required String firstName,
-     required String lastName,
-     required String mobile,
-      String? email,
-      String? password,
-      String? token,
-      String? adress,
-     required int type,
-     required bool activity,
-      String? image,
-      String? lastLogin});
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.mobile,
+    this.email,
+    this.password,
+    this.token,
+    this.adress,
+    required this.type,
+    required this.isActive,
+    this.image,
+    this.lastLogin,
+  });
 
-   User.fromJson(dynamic json){
-    id : json['id'];
-    firstName : json['firstName'];
-    lastName : json['lastName'];
-    mobile : json['mobile'];
-    email : json['email'];
-    password : json['password'];
-    token :json['token'];
-    adress : json['adress'];
-    type : json['type'];
-    activity : json['activity']==1;
-    image : json['image'];
-    lastLogin : json['lastLogin'];
+  User.fromJson(Map<String, dynamic> json) {
+    id = json["id"] as int;
+    firstName = json["firstName"] as String;
+    lastName = json["lastName"] as String;
+    mobile = json["mobile"] as String;
+    email = json["email"] as String;
+    password = json["password"] as String;
+    token = json["token"] as String;
+    adress = json["adress"] as String;
+    type = json["type"] as int;
+    isActive = json["isActive"] as bool;
+    image = json["image"] as String;
+    lastLogin = json["lastLogin"] as String;
   }
 
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map['Id'] = id;
-    map['firstName'] = firstName;
-    map['lastName'] = lastName;
-    map['mobile'] = mobile;
-    map['email'] = email;
-    map['password'] = password;
-    map['token'] = token;
-    map['adress'] = adress;
-    map['type'] = type;
-    map['activity'] = activity?1:0;
-    map['image'] = image;
-    map['lastLogin'] = lastLogin;
+    final map = <String, dynamic>{};
+    map["id"] = id;
+    map["firstName"] = firstName;
+    map["lastName"] = lastName;
+    map["mobile"] = mobile;
+    map["email"] = email;
+    map["password"] = password;
+    map["token"] = token;
+    map["adress"] = adress;
+    map["type"] = type;
+    map["isActive"] = isActive;
+    map["image"] = image;
+    map["lastLogin"] = lastLogin;
     return map;
   }
-  String get typeName=> type==1?'Admin':type==2?'Customer':'Other';
+
+  String get typeName => type == 1
+      ? "Admin"
+      : type == 2
+          ? "Customer"
+          : "Other";
 }
