@@ -2,6 +2,11 @@
 
 import 'package:flutter/material.dart';
 
+const double smallScreenSize = 360;
+const double mediumScreenSize = 768;
+const double customScreenSize = 1100;
+const double largeScreenSize = 1366;
+
 const primaryColor = Color(0xFF0983C4);
 const menuTextColor = Color(0xFFF99696);
 const foodoColor = Color(0xFF54A0B8);

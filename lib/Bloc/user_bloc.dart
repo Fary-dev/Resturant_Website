@@ -1,51 +1,62 @@
-// ignore_for_file: avoid_void_async
-
-import 'package:flutter_app/Bloc/bloc_state.dart';
+import '../Services/service.dart';
 import 'package:flutter_app/Moduls/user_mode.dart';
-import 'package:flutter_app/Repository/user_repository.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'state_bloc.dart';
 
-class UserBloc extends Cubit<BlocState> {
-  UserBloc() : super(Initial()) {
+class UserBloc extends GetxController {
+  final AuthenticationService _authenticationService;
+  final _state = StateBloc().obs;
+
+  StateBloc get state => _state.value;
+
+  UserBloc(this._authenticationService);
+
+  User? _user;
+
+  @override
+  void onInit() {
+    _state.value = InitialUser();
     SharedPreferences.getInstance().then((value) {
       String token = value.getString('token') ?? '';
       if (token.isNotEmpty) verifyToken(token);
     });
+    super.onInit();
   }
 
-  User? _user;
-
-  void authenticete(String mobile, String pass, bool remember) async {
-    if (state is Loding) return;
-
+  Future<void> verifyToken(String token) async {
+    if (_state.value is LodingUser) return;
     try {
-      emit(Loding());
-      _user = await UserRepository.authentication(mobile, pass);
+      _state.value = LodingUser();
+      _user = await _authenticationService.verifyToken(token);
+      if (_user == null) _state.value = InitialUser();
+      _state.value = Authenticated(user: user!);
+    } catch (e) {
+      throw Exception(e);
+      // _state.value = FaildUser(massage: e as String);
+    }
+  }
+
+  Future<void> signIn(String mobile, String pass, bool remember) async {
+    if (_state.value is LodingUser) return;
+    try {
+      _state.value = LodingUser();
+
+      _user =
+          await _authenticationService.authenticationWithMobile(mobile, pass);
+      _state.value = Authenticated(user: user!);
       if (remember)
         await SharedPreferences.getInstance()
             .then((value) => value.setString('token', _user!.token!));
-      emit(Authenticated(_user!));
     } catch (e) {
-      emit(Faild(e as Exception));
+      _state.value = FaildUser(e as Exception);
     }
   }
 
-  void verifyToken(String token) async {
-    if (state is Loding) return;
-    try {
-      emit(Loding());
-      _user = await UserRepository.verifyToken(token);
-      emit(Authenticated(_user!));
-    } catch (e) {
-      emit(Initial());
-    }
-  }
-
-  void signOut() async {
+  Future<void> signOut() async {
     await SharedPreferences.getInstance()
         .then((value) => value.remove('token'));
-    emit(Initial());
+    _state.value = InitialUser();
   }
 
   User? get user => _user;

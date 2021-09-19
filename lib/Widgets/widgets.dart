@@ -4,16 +4,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/Buttons/hoverAnimation.dart';
+import 'package:flutter_app/Buttons/menu_icon.dart';
+import 'package:flutter_app/Constant/constant.dart';
 import 'package:flutter_app/Exeptions/extensionFile.dart';
 import 'package:flutter_app/Moduls/OnburingModul.dart';
+import 'package:flutter_app/Moduls/user_mode.dart';
 import 'package:flutter_app/screens/login_width_mobile_app.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MBloc<t> {
   BehaviorSubject<t> _bloc = BehaviorSubject();
+
   Stream<t> get stream => _bloc.stream;
+
   t get value => _bloc.value;
 
   void setValue(t val) => _bloc.add(val);
@@ -115,6 +122,8 @@ class MText extends StatelessWidget {
   final Color? color;
   final bool? bold;
   final TextAlign? alignment;
+  final TextStyle? textStyle;
+  final double? opacity;
 
   const MText(
     this.title, {
@@ -122,18 +131,24 @@ class MText extends StatelessWidget {
     this.color,
     this.bold,
     this.alignment,
+    this.textStyle,
+    this.opacity,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      textAlign: alignment,
-      style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: bold == true ? FontWeight.bold : FontWeight.normal,
-        color: color,
+    return Opacity(
+      opacity: opacity == null ? 1.0 : opacity!,
+      child: Text(
+        title,
+        textAlign: alignment,
+        style: textStyle ??
+            TextStyle(
+              fontSize: fontSize,
+              fontWeight: bold == true ? FontWeight.bold : FontWeight.normal,
+              color: color,
+            ),
       ),
     );
   }
@@ -270,6 +285,7 @@ class MSwitch extends StatelessWidget {
   final bool value;
   final Function(bool) onChanged;
   final String? hint;
+
   MSwitch({required this.value, required this.onChanged, this.hint, Key? key})
       : super(key: key);
 
@@ -306,6 +322,7 @@ class MSwitch extends StatelessWidget {
 
 class MError extends StatelessWidget {
   final Exception exception;
+
   const MError({required this.exception, Key? key}) : super(key: key);
 
   @override
@@ -327,5 +344,702 @@ class MIndicator extends StatelessWidget {
   MIndicator({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => CupertinoActivityIndicator().center;
+  Widget build(BuildContext context) => LinearProgressIndicator().center;
+}
+
+class AnimateButton extends StatefulWidget {
+  final bool mobilePage;
+
+  AnimateButton({
+    required this.mobilePage,
+  });
+
+  @override
+  _AnimateButtonState createState() => _AnimateButtonState();
+}
+
+class _AnimateButtonState extends State<AnimateButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  late Animation _colorAnimation;
+
+  double height = 0.0;
+  double width = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    _animation = Tween<double>(begin: 1.2, end: 4.0).animate(
+      CurvedAnimation(curve: Curves.linear, parent: _controller),
+    );
+    _colorAnimation =
+        ColorTween(begin: Colors.white, end: Colors.black).animate(
+      CurvedAnimation(curve: Curves.linear, parent: _controller),
+    );
+    _controller.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (value) {
+        setState(() {
+          height = 200.0;
+          width = 200.0;
+          _controller.forward();
+        });
+      },
+      onExit: (value) {
+        setState(() {
+          height = 0.0;
+          width = 0.0;
+          _controller.reverse();
+        });
+      },
+      child: Container(
+        height: 50.0,
+        width: 160.0,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          border: Border.all(color: Colors.transparent, width: 2.0),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: Center(
+          child: Stack(
+            children: [
+              OverflowBox(
+                maxHeight: 200.0,
+                maxWidth: 200.0,
+                child: AnimatedContainer(
+                  curve: Curves.easeOut,
+                  duration: Duration(milliseconds: 375),
+                  height: height,
+                  width: width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(200.0),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'EXPLORE',
+                  style: TextStyle(
+                    letterSpacing: _animation.value,
+                    color: _colorAnimation.value as Color,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 12.0,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AnimateButtonWithBorder extends StatefulWidget {
+  final bool mobilePage;
+  final String titleButton;
+
+  AnimateButtonWithBorder({
+    required this.mobilePage,
+    required this.titleButton,
+  });
+
+  @override
+  _AnimateButtonWithBorderState createState() =>
+      _AnimateButtonWithBorderState();
+}
+
+class _AnimateButtonWithBorderState extends State<AnimateButtonWithBorder>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  late Animation _colorAnimation;
+
+  double height = 0.0;
+  double width = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 100),
+    );
+    _animation = Tween<double>(begin: 1.2, end: 1.2).animate(
+      CurvedAnimation(curve: Curves.linear,parent: _controller),
+    );
+    _colorAnimation =
+        ColorTween(begin: Colors.white, end: primaryColor).animate(
+      CurvedAnimation(curve: Curves.linear, parent: _controller),
+    );
+    _controller.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (value) {
+        setState(() {
+          height = 50.0;
+          width = 160.0;
+          _controller.forward();
+        });
+      },
+      onExit: (value) {
+        setState(() {
+          height = 0.0;
+          width = 0.0;
+          _controller.reverse();
+        });
+      },
+      child: Container(
+        height: 50.0,
+        width: 160.0,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          // border: Border.all(color: Theme.of(context).primaryColor, width: 2.0),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: Center(
+          child: Stack(
+            children: [
+              OverflowBox(
+                maxHeight: 160.0,
+                maxWidth: 160.0,
+                child: AnimatedContainer(
+                  curve: Curves.linear,
+                  duration: Duration(milliseconds: 100),
+                  height: height,
+                  width: width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    // borderRadius: BorderRadius.circular(200.0),
+                    border: Border.all(
+                      width: 2,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  widget.titleButton,
+                  style: TextStyle(
+                    letterSpacing: _animation.value,
+                    color: _colorAnimation.value as Color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.0,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TopLeftButton extends StatefulWidget {
+  final bool mobilePage;
+
+  TopLeftButton({required this.mobilePage});
+
+  @override
+  _TopLeftButtonState createState() => _TopLeftButtonState();
+}
+
+class _TopLeftButtonState extends State<TopLeftButton> {
+  double height1 = 15.0;
+  double width1 = 15.0;
+  double height2 = 8.0;
+  double width2 = 8.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (value) {
+        setState(() {
+          height1 = 8.0;
+          width1 = 8.0;
+          height2 = 15.0;
+          width2 = 15.0;
+        });
+      },
+      onExit: (value) {
+        setState(() {
+          height1 = 15.0;
+          width1 = 15.0;
+          height2 = 8.0;
+          width2 = 8.0;
+        });
+      },
+      child: Container(
+        height: widget.mobilePage ? 75 : 130,
+        width: widget.mobilePage ? 80 : 130,
+        color: Colors.white,
+        child: Stack(
+          children: [
+            Positioned(
+              top: widget.mobilePage ? 40.8 : 65.8,
+              left: widget.mobilePage ? 40 : 65,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+                height: height2,
+                width: width2,
+                color: Colors.black,
+                transform: Matrix4.identity()..rotateZ(2.4),
+              ),
+            ),
+            Positioned(
+              top: widget.mobilePage ? 41 : 66,
+              left: widget.mobilePage ? 36 : 61,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+                height: height1,
+                width: width1,
+                color: Colors.black,
+                transform: Matrix4.identity()..rotateZ(-0.8),
+              ),
+            ),
+            Positioned(
+              top: widget.mobilePage ? 38.8 : 63.8,
+              left: widget.mobilePage ? 38 : 63,
+              child: Container(
+                height: 3.0,
+                width: 3.0,
+                color: Colors.white,
+                transform: Matrix4.identity()..rotateZ(0.8),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TopButton extends StatefulWidget {
+  final String text;
+  late bool selected;
+
+  TopButton(this.text, this.selected);
+
+  @override
+  _TopButtonState createState() => _TopButtonState();
+}
+
+class _TopButtonState extends State<TopButton> {
+  double height = 1.0;
+  double width = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (value) {
+        double space = widget.text.length * 7;
+        setState(() {
+          width = space;
+          widget.selected = true;
+        });
+      },
+      onExit: (value) {
+        setState(() {
+          width = 0.0;
+          widget.selected = false;
+        });
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 12,
+          ),
+          Text(
+            widget.text,
+            style: Theme.of(context).textTheme.headline1!.copyWith(
+                  color: widget.selected
+                      ? Theme.of(context).primaryColor
+                      : Colors.white,
+                  fontSize: 12,
+                ),
+          ).vPadding(5),
+          AnimatedContainer(
+            margin: EdgeInsets.only(bottom: 8.0),
+            duration: Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+              color: widget.selected
+                  ? Theme.of(context).primaryColor
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AniSearch extends StatefulWidget {
+  @override
+  _AniSearchState createState() => _AniSearchState();
+}
+
+class _AniSearchState extends State<AniSearch>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _con;
+  late TextEditingController _textEditingController;
+  int toggle = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+    _con = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 375),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50.0,
+      width: (toggle == 0) ? 48 : 300.0,
+      alignment: Alignment(-1.0, 0.0),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        height: 48.0,
+        width: (toggle == 0) ? 48.0 : 300.0,
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              spreadRadius: -10.0,
+              blurRadius: 10.0,
+              offset: Offset(0.0, 10.0),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            // AnimatedPositioned(
+            //   duration: Duration(milliseconds: 375),
+            //   top: 6.0,
+            //   right: 7.0,
+            //   curve: Curves.easeOut,
+            //   child: AnimatedOpacity(
+            //     opacity: (toggle == 0) ? 0.0 : 1.0,
+            //     duration: Duration(milliseconds: 200),
+            //     child: Container(
+            //       padding: EdgeInsets.all(8.0),
+            //       decoration: BoxDecoration(
+            //         color: Color(0xffF2F3F7),
+            //         borderRadius: BorderRadius.circular(30.0),
+            //       ),
+            //       child: AnimatedBuilder(
+            //         child: Icon(
+            //           Icons.mic,
+            //           size: 20.0,
+            //         ),
+            //         builder: (context, widget) {
+            //           return Transform.rotate(
+            //             angle: _con.value * 2.0 * pi,
+            //             child: widget,
+            //           );
+            //         },
+            //         animation: _con,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            AnimatedPositioned(
+              duration: Duration(milliseconds: 375),
+              left: (toggle == 0) ? 20.0 : 40.0,
+              curve: Curves.easeOut,
+              top: 11.0,
+              child: AnimatedOpacity(
+                opacity: (toggle == 0) ? 0.0 : 1.0,
+                duration: Duration(milliseconds: 200),
+                child: Container(
+                  height: 23.0,
+                  width: 180.0,
+                  child: TextField(
+                    controller: _textEditingController,
+                    cursorRadius: Radius.circular(10.0),
+                    cursorWidth: 2.0,
+                    cursorColor: Colors.black,
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      labelText: 'Search...',
+                      labelStyle: TextStyle(
+                        color: Color(0xff5B5B5B),
+                        fontSize: 17.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      alignLabelWithHint: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 48,
+              width: 48,
+              child: Material(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30.0),
+                child: IconButton(
+                  splashRadius: 19.0,
+                  icon: Icon(
+                    CupertinoIcons.search,
+                    size: 25,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    setState(
+                      () {
+                        if (toggle == 0) {
+                          toggle = 1;
+                          _con.forward();
+                        } else {
+                          toggle = 0;
+                          _textEditingController.clear();
+                          _con.reverse();
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final double? height;
+  final User? user;
+  final Color? color;
+
+  CustomAppBar({
+    this.height,
+    this.user,
+    this.color,
+  });
+
+  @override
+  Size get preferredSize => Size.fromHeight(height!);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        AppBar(
+          toolbarHeight: preferredSize.height,
+          // shape: ContinuousRectangleBorder(
+          //   borderRadius: const BorderRadius.all(Radius.circular(18)),
+          // ),
+          backgroundColor: color,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          titleSpacing: 0,
+          centerTitle: true,
+          title: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: context.widthScreen > mediumScreenSize == true
+                      ? Text(RESTURANT_NAME,
+                              style: GoogleFonts.playfairDisplay(
+                                  fontSize: 20, fontWeight: FontWeight.bold))
+                          .hPadding(10)
+                      : MenuIcon(color: Color(0xffffffff),),
+                ),
+              ),
+              Expanded(
+                  flex: 4,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      context.widthScreen < mediumScreenSize
+                          ? SvgPicture.asset(
+                              'Images/logo.svg',
+                              height: 50,
+                              color: Colors.white,
+                            ).center.expanded
+                          : Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TopButton('HOME', false),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                TopButton('MENU', false),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                TopButton('RESERVATION', false),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                TopButton('GALLERY', false),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                TopButton('CONTACT', false),
+                              ],
+                            ),
+                    ],
+                  )),
+              Expanded(
+                  flex: 2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (context.widthScreen > mediumScreenSize)
+                        Row(
+                          children: [
+                            user != null
+                                ? 'Hi ${user!.firstName}'.toLabel(
+                                    color: Colors.white,
+                                  )
+                                : 'LOGIN'.toLabel(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: SvgPicture.asset(
+                                'Images/person(4).svg',
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      if (context.widthScreen > smallScreenSize)
+                        IconButton(
+                          onPressed: () {},
+                          icon: SvgPicture.asset(
+                            'Images/shopping_bag(2).svg',
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
+                  )),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class IconDiscription extends StatelessWidget {
+  final String? header;
+  final String? image;
+  final String title;
+  final String discription;
+  final String? buttonTitle;
+  final double? titleSize;
+
+  const IconDiscription({
+    Key? key,
+    this.image,
+    this.header,
+    this.titleSize,
+    required this.title,
+    required this.discription,
+    this.buttonTitle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (header != null)
+            Text(
+              header!,
+              style: Theme.of(context).textTheme.headline1!.copyWith(
+                    fontSize: 16,
+                    letterSpacing: 2,
+                    color: Theme.of(context).primaryColor,
+                  ),
+            ),
+          if (image != null)
+            SvgPicture.asset(
+              image!,
+              color: Theme.of(context).primaryColor,
+              height: 60,
+              width: 60,
+            ),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.headline1!.copyWith(
+                  fontSize: titleSize ?? 16,
+                  letterSpacing: 2,
+                ),
+          ).vPadding(30),
+          Text(
+            discription,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.clip,
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1!
+                .copyWith(fontSize: 14, letterSpacing: 1, height: 2),
+          ),
+          if (buttonTitle != null)
+            HoverAnimation(
+              height: 50,
+              width: 160,
+              thickness: 2,
+              milliseconde: 500,
+              curve: Curves.easeInOutSine,
+              child: Text(
+                'BOOK A TABLE',
+                style: GoogleFonts.poppins(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
+                  color: primaryColor,
+                ),
+              ).center,
+            ).vPadding(30),
+        ],
+      ).hPadding(15);
 }

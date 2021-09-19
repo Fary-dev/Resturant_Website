@@ -25,14 +25,14 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.3
-  flutter_bloc: ^7.2.0
   get: ^4.3.8
+  equatable: ^2.0.3
   lint: ^1.7.2
   flutter_svg: ^0.22.0 
   rxdart: ^0.27.2
-  shared_preferences: ^2.0.7
-  # connectivity: ^3.0.6
-  # responsive_builder: ^0.4.1
+  shared_preferences: ^2.0.8
+  google_fonts: ^2.1.0
+  animate_icons: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -55,12 +55,19 @@ flutter:
 
   # To add Images to your application, add an Images section, like this:
   assets:
-     - Images/location.svg
-     - Images/order.svg
-     - Images/quality.svg
-     - Images/pay.svg
-     - Images/welcome.svg
-     - Images/logo.svg
+    - Images/location.svg
+    - Images/order.svg
+    - Images/quality.svg
+    - Images/pay.svg
+    - Images/welcome.svg
+    - Images/logo.svg
+    - Images/menu(7).svg
+    - Images/shopping_bag(2).svg
+    - Images/person(4).svg
+    - Images/search(4).svg
+    - Images/timer_icon.svg
+    - Images/star_icon.svg
+    - Images/bio_icon.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
