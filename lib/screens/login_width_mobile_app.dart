@@ -1,21 +1,21 @@
-// ignore_for_file: avoid_print
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Bloc/state_bloc.dart';
 import 'package:flutter_app/Bloc/user_bloc.dart';
 import 'package:flutter_app/Constant/constant.dart';
-import 'package:flutter_app/Exeptions/extensionFile.dart';
+import 'package:flutter_app/Extension/extensionFile.dart';
 import 'package:flutter_app/Widgets/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'login_with_Web.dart';
 
+//ignore: must_be_immutable
 class MobileApp extends StatelessWidget {
   MobileApp({Key? key}) : super(key: key);
   UserBloc controller = Get.find();
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,16 +30,28 @@ class MobileApp extends StatelessWidget {
               children: [
                 if (controller.state is LodingUser) MIndicator(),
                 SvgPicture.asset(
-                  'Images/welcome.svg',
+                  'images/welcome.svg',
                   height: context.heightScreen * 0.2,
                 ),
                 'Welcome to $RESTURANT_NAME'.toLabel(
                   textStyle: Theme.of(context).textTheme.headline1!,
                 ),
-                const MTextField(lable: 'User Name').vPadding(10),
-                const MTextField(
+                MTextField(
+                  lable: 'User Name',
+                  controller: mobile,
+                  validator: (val) {
+                    if ((val ?? '').isEmpty) return 'can not be empety';
+                    return null;
+                  },
+                ).vPadding(10),
+                MTextField(
                   lable: 'Password',
                   obscureText: true,
+                  controller: pass,
+                  validator: (val) {
+                    if ((val ?? '').isEmpty) return 'can not be empety';
+                    return null;
+                  },
                 ).vPadding(10),
                 const SizedBox(
                   height: 20,
@@ -58,12 +70,10 @@ class MobileApp extends StatelessWidget {
           children: [
             MButton(
               title: 'Login',
-              onTap: ()  {
-              if (_formKey.currentState!.validate()) {
-            controller.signIn(
-            mobile.text, pass.text, remember);
-    }
-    },
+              onTap: () {
+                if (_formKey.currentState!.validate())
+                  controller.signIn(mobile.text, pass.text, remember);
+              },
               radius: 10,
               padding: 5,
               icon: Icons.vpn_key_rounded,
@@ -86,11 +96,9 @@ class MobileApp extends StatelessWidget {
               isTextButton: true,
               fontSize: 10,
             ),
-
           ],
         ).vPadding(40).hPadding(15),
       ),
-
     );
   }
 }

@@ -96,7 +96,7 @@ class _HoverAnimationState extends State<HoverAnimation> {
                 height: widget.height,
                 width: widget.width,
                 color: animate?Colors.transparent:primaryColor.withOpacity(0.3),
-                child: widget.child,
+                child:Center(child:  widget.child,),
               ),
             ],
           ),

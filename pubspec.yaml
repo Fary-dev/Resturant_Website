@@ -18,21 +18,22 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.3
-  get: ^4.3.8
+  cupertino_icons: ^1.0.4
+  get: ^4.6.1
   equatable: ^2.0.3
-  lint: ^1.7.2
-  flutter_svg: ^0.22.0 
-  rxdart: ^0.27.2
-  shared_preferences: ^2.0.8
-  google_fonts: ^2.1.0
+  lint: ^1.8.2
+  flutter_svg: ^1.0.3
+  rxdart: ^0.27.3
+  shared_preferences: ^2.0.12
+  google_fonts: ^2.2.0
   animate_icons: ^2.0.0
+  carousel_slider: ^4.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -53,27 +54,41 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add Images to your application, add an Images section, like this:
+  # To add images to your application, add an images section, like this:
   assets:
-    - Images/location.svg
-    - Images/order.svg
-    - Images/quality.svg
-    - Images/pay.svg
-    - Images/welcome.svg
-    - Images/logo.svg
-    - Images/menu(7).svg
-    - Images/shopping_bag(2).svg
-    - Images/person(4).svg
-    - Images/search(4).svg
-    - Images/timer_icon.svg
-    - Images/star_icon.svg
-    - Images/bio_icon.svg
+    - images/App/2.png
+    - images/App/3.png
+    - images/App/4.png
+    - images/App/5.png
+    - images/App/6.png
+    - images/App/7.png
+    - images/App/8.png
+    - images/App/9.png
+    - images/App/10.png
+    - images/location.svg
+    - images/order.svg
+    - images/quality.svg
+    - images/pay.svg
+    - images/welcome.svg
+    - images/logo.svg
+    - images/menu(7).svg
+    - images/shopping_bag(2).svg
+    - images/person(4).svg
+    - images/search(4).svg
+    - images/timer_icon.svg
+    - images/star_icon.svg
+    - images/bio_icon.svg
+    - images/bkg.png
+    - images/burger.jpg
+    - images/slide1.jpg
+    - images/slide2.jpg
+    - images/slide3.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
-  # For details regarding adding Images from package dependencies, see
+  # For details regarding adding images from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 
   # To add custom fonts to your application, add a fonts section here,

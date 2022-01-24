@@ -2,13 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/login_with_Web.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'Bloc/state_bloc.dart';
 import 'Bloc/user_bloc.dart';
 import 'Constant/constant.dart';
 import 'Services/service.dart';
 import 'screens/home/home.dart';
-import 'screens/onBurding_screen.dart';
+import 'screens/onBoarding_screen.dart';
 
 void main() {
   initialize();
@@ -65,7 +64,17 @@ class MyApp extends GetWidget<UserBloc> {
       ),
       home: defaultTargetPlatform == TargetPlatform.android ||
               defaultTargetPlatform == TargetPlatform.iOS
-          ? OnburdingScreen()
+          ? Obx(
+            () {
+          if (controller.state is Authenticated)
+            return HomePage(
+              user: (controller.state as Authenticated).user,
+            );
+          else
+            return OnboardingScreen();
+        },
+      )
+      // OnburdingScreen()
           : Obx(
               () {
                 if (controller.state is Authenticated)

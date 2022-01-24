@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_await_in_return, avoid_classes_with_only_static_members, invalid_return_type_for_catch_error
 
-import 'package:flutter_app/Moduls/user_mode.dart';
+import 'package:flutter_app/Models/user_mode.dart';
 
 class UserRepository {
   static Future<User> authentication(String mobile, String pass) async {

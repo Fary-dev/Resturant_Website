@@ -102,7 +102,7 @@
 //                           : IconButton(
 //                               onPressed: () {},
 //                               icon: SvgPicture.asset(
-//                                 'Images/menu(7).svg',
+//                                 'images/menu(7).svg',
 //                                 height: 28,
 //                                 width: 28,
 //                                 color: Theme.of(context).iconTheme.color,
@@ -117,7 +117,7 @@
 //                         children: [
 //                           width < mediumScreenSize
 //                               ? SvgPicture.asset(
-//                                   'Images/logo.svg',
+//                                   'images/logo.svg',
 //                                   height: 50,
 //                                   color: Theme.of(context).iconTheme.color,
 //                                 ).center.expanded
@@ -178,7 +178,7 @@
 //                                 IconButton(
 //                                   onPressed: () {},
 //                                   icon: SvgPicture.asset(
-//                                     'Images/person(4).svg',
+//                                     'images/person(4).svg',
 //                                     color: Theme.of(context).iconTheme.color,
 //                                   ),
 //                                 ),
@@ -188,7 +188,7 @@
 //                             IconButton(
 //                               onPressed: () {},
 //                               icon: SvgPicture.asset(
-//                                 'Images/shopping_bag(2).svg',
+//                                 'images/shopping_bag(2).svg',
 //                                 color: Theme.of(context).iconTheme.color,
 //                               ),
 //                             ),

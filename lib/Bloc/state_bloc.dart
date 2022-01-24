@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_app/Moduls/user_mode.dart';
+import 'package:flutter_app/Models/user_mode.dart';
 
 class StateBloc extends Equatable {
-//   const BlocStateGetx();
   @override
   List<Object> get props => [];
 }
@@ -23,5 +22,5 @@ class FaildUser extends StateBloc {
   FaildUser(this.massage);
   @override
   List<Object> get props => [massage];
-  List<Object>? get exceptione => null;
+  List<Object>? get exception => null;
 }

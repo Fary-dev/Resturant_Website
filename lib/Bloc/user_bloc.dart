@@ -1,7 +1,8 @@
-import '../Services/service.dart';
-import 'package:flutter_app/Moduls/user_mode.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Services/service.dart';
+import 'package:flutter_app/Models/user_mode.dart';
 import 'state_bloc.dart';
 
 class UserBloc extends GetxController {
@@ -41,15 +42,17 @@ class UserBloc extends GetxController {
     if (_state.value is LodingUser) return;
     try {
       _state.value = LodingUser();
+      print('${mobile}  ${pass}  ${remember}');
+      _user = await _authenticationService.authenticationWithMobile(mobile, pass);
+      print('${mobile}  ${pass}  ${remember}');
+       _state.value = Authenticated(user: _user!);
 
-      _user =
-          await _authenticationService.authenticationWithMobile(mobile, pass);
-      _state.value = Authenticated(user: user!);
       if (remember)
         await SharedPreferences.getInstance()
             .then((value) => value.setString('token', _user!.token!));
     } catch (e) {
-      _state.value = FaildUser(e as Exception);
+      throw Exception(e);
+      // _state.value = FaildUser(e as Exception);
     }
   }
 

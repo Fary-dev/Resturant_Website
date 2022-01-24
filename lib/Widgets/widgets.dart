@@ -3,13 +3,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_app/Buttons/hoverAnimation.dart';
 import 'package:flutter_app/Buttons/menu_icon.dart';
 import 'package:flutter_app/Constant/constant.dart';
-import 'package:flutter_app/Exeptions/extensionFile.dart';
-import 'package:flutter_app/Moduls/OnburingModul.dart';
-import 'package:flutter_app/Moduls/user_mode.dart';
+import 'package:flutter_app/Extension/extensionFile.dart';
+import 'package:flutter_app/Models/Onboarding_model.dart';
+import 'package:flutter_app/Models/user_mode.dart';
 import 'package:flutter_app/screens/login_width_mobile_app.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -206,8 +205,75 @@ class MTextField extends StatelessWidget {
   }
 }
 
+class MEasyTextField extends StatelessWidget {
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
+  final String? hint;
+  final Function(String?)? onChange;
+  final Function(String?)? onSave;
+  final FormFieldValidator<String>? validator;
+  final bool autoFocus;
+  final bool? obscureText;
+  final TextEditingController? controller;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? textInputType;
+  final bool isEmpety;
+  final int maxLines;
+
+  const MEasyTextField({
+    this.prefixIcon,
+    this.suffixIcon,
+    required this.hint,
+     this.maxLines=1,
+    this.validator,
+    this.controller,
+    this.autoFocus = false,
+    this.onChange,
+    this.onSave,
+    this.obscureText = false,
+    this.inputFormatters,
+    this.textInputType,
+    this.isEmpety = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: TextFormField(
+
+        minLines: 1,
+        // scrollPadding: const EdgeInsets.symmetric(vertical: 15.0,),
+        maxLines: maxLines,
+        keyboardType: textInputType,
+        inputFormatters: inputFormatters,
+        controller: controller,
+        style: Theme.of(context).textTheme.button,
+        obscureText: obscureText!,
+        validator: validator,
+        onSaved: onSave,
+        textCapitalization: TextCapitalization.words,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 25.0,horizontal: 10,),
+          // isDense: true,
+          border: InputBorder.none,
+          fillColor: Colors.grey.shade200,
+          filled: true,
+          // border: OutlineInputBorder(
+          //   borderRadius: BorderRadius.circular(0),
+          // ),
+          hintStyle: TextStyle(color:Color(0xff000000),),
+          hintText: hint,
+          suffixIcon: suffixIcon,
+          prefixIcon: prefixIcon,
+        ),
+
+      ),
+    );
+  }
+}
+
 class Onbording extends StatelessWidget {
-  final List<OnbordingContent> contents;
+  final List<OnboardingContent> contents;
 
   Onbording(this.contents, {Key? key}) : super(key: key);
   final PageController _pageController = PageController();
@@ -637,9 +703,10 @@ class _TopLeftButtonState extends State<TopLeftButton> {
   }
 }
 
+//ignore: must_be_immutable
 class TopButton extends StatefulWidget {
-  final String text;
-  late bool selected;
+  late String text;
+  late final bool selected;
 
   TopButton(this.text, this.selected);
 
@@ -703,12 +770,12 @@ class _TopButtonState extends State<TopButton> {
   }
 }
 
-class AniSearch extends StatefulWidget {
+class AnimateSearch extends StatefulWidget {
   @override
-  _AniSearchState createState() => _AniSearchState();
+  _AnimateSearchState createState() => _AnimateSearchState();
 }
 
-class _AniSearchState extends State<AniSearch>
+class _AnimateSearchState extends State<AnimateSearch>
     with SingleTickerProviderStateMixin {
   late AnimationController _con;
   late TextEditingController _textEditingController;
@@ -899,7 +966,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     children: [
                       context.widthScreen < mediumScreenSize
                           ? SvgPicture.asset(
-                              'Images/logo.svg',
+                              'images/logo.svg',
                               height: 50,
                               color: Colors.white,
                             ).center.expanded
@@ -939,12 +1006,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             user != null
                                 ? 'Hi ${user!.firstName}'.toLabel(
                                     color: Colors.white,
+                              fontSize: 14
                                   )
-                                : 'LOGIN'.toLabel(),
+                                : 'LOGIN'.toLabel(fontSize: 14),
                             IconButton(
                               onPressed: () {},
                               icon: SvgPicture.asset(
-                                'Images/person(4).svg',
+                                'images/person(4).svg',
                                 color: Colors.white,
                               ),
                             ),
@@ -954,7 +1022,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         IconButton(
                           onPressed: () {},
                           icon: SvgPicture.asset(
-                            'Images/shopping_bag(2).svg',
+                            'images/shopping_bag(2).svg',
                             color: Colors.white,
                           ),
                         ),
@@ -973,8 +1041,14 @@ class IconDiscription extends StatelessWidget {
   final String? image;
   final String title;
   final String discription;
+  final Color? colorTitle;
+  final Color? colorHeader;
+  final Color? colorDiscription;
   final String? buttonTitle;
   final double? titleSize;
+  final TextAlign? textAlign;
+  final MainAxisAlignment?mainAxisAlignment;
+  final CrossAxisAlignment?crossAxisAlignment;
 
   const IconDiscription({
     Key? key,
@@ -982,14 +1056,20 @@ class IconDiscription extends StatelessWidget {
     this.header,
     this.titleSize,
     required this.title,
+     this.colorDiscription,
+     this.colorHeader,
+     this.colorTitle,
     required this.discription,
     this.buttonTitle,
+    this.textAlign,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment:mainAxisAlignment?? MainAxisAlignment.start,
+        crossAxisAlignment:crossAxisAlignment?? CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           if (header != null)
@@ -998,7 +1078,7 @@ class IconDiscription extends StatelessWidget {
               style: Theme.of(context).textTheme.headline1!.copyWith(
                     fontSize: 16,
                     letterSpacing: 2,
-                    color: Theme.of(context).primaryColor,
+                    color:colorHeader?? Theme.of(context).primaryColor,
                   ),
             ),
           if (image != null)
@@ -1013,16 +1093,17 @@ class IconDiscription extends StatelessWidget {
             style: Theme.of(context).textTheme.headline1!.copyWith(
                   fontSize: titleSize ?? 16,
                   letterSpacing: 2,
+              color: colorTitle??Color(0xff000000),
                 ),
           ).vPadding(30),
           Text(
             discription,
-            textAlign: TextAlign.center,
+            textAlign:textAlign?? TextAlign.center,
             overflow: TextOverflow.clip,
             style: Theme.of(context)
                 .textTheme
                 .subtitle1!
-                .copyWith(fontSize: 14, letterSpacing: 1, height: 2),
+                .copyWith(fontSize: 14, letterSpacing: 1, height: 2,color: colorDiscription??Color(0xff000000),),
           ),
           if (buttonTitle != null)
             HoverAnimation(

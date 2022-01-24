@@ -1,6 +1,5 @@
-// ignore_for_file: overridden_fields
 
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Bloc/state_bloc.dart';
 import 'package:flutter_app/Bloc/user_bloc.dart';
@@ -8,14 +7,14 @@ import 'package:flutter_app/Constant/constant.dart';
 import 'package:flutter_app/Widgets/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:flutter_app/Exeptions/extensionFile.dart';
+import 'package:flutter_app/Extension/extensionFile.dart';
 
-TextEditingController mobile = TextEditingController();
-TextEditingController pass = TextEditingController();
+final TextEditingController mobile = TextEditingController();
+final TextEditingController pass = TextEditingController();
 bool remember = false;
 
 // ignore: must_be_immutable
-class Login extends StatelessWidget {
+class Login extends StatelessWidget  {
   Login({Key? key}) : super(key: key);
   UserBloc controller = Get.find();
   final _formKey = GlobalKey<FormState>();
@@ -23,7 +22,9 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      // backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.black,
+
       body: Container(
         width: 400,
         decoration: const BoxDecoration(
@@ -38,10 +39,11 @@ class Login extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (controller.state is LodingUser) MIndicator(),
-                  SvgPicture.asset(
-                    'Images/welcome.svg',
-                    height: 100,
-                  ),
+                     SvgPicture.asset(
+                      'images/welcome.svg',
+                      height: 100,
+                       fit: BoxFit.fitHeight,
+                    ),
                   'Welcome to your $RESTURANT_NAME'
                       .toLabel(
                         textStyle: Theme.of(context).textTheme.headline1!,
@@ -50,9 +52,10 @@ class Login extends StatelessWidget {
                   MTextField(
                     lable: 'User Name',
                     controller: mobile,
-                    validator: (val) {
-                      if ((val ?? '').isEmpty) return 'can not be empety';
-                      return null;
+                    validator: ( val) {
+                      if ((val ?? '').isEmpty)
+                        return 'can not be empty';
+                        return null;
                     },
                   ),
                   MTextField(
@@ -60,7 +63,7 @@ class Login extends StatelessWidget {
                     obscureText: true,
                     controller: pass,
                     validator: (val) {
-                      if ((val ?? '').isEmpty) return 'can not be empety';
+                      if ((val ?? '').isEmpty) return 'can not be empty';
                       return null;
                     },
                   ).vPadding(10),
